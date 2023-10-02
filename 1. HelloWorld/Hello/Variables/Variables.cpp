@@ -1,7 +1,7 @@
 #include "VariablesInit.h"
 #include <iostream>
 #include <QVariant> //required for QVariant command;
-#include <QDebug> //required for qInfo() command;
+#include <QDebug> //required for qInfo() command/;
 
 void VariableInit(){
 
@@ -27,12 +27,13 @@ void VariableSizes(){
     qInfo() << "char minimum value: " << CHAR_MIN ;
     qInfo() << "char maximum value: " << CHAR_MAX ;
     qInfo() << "Size of int : " << sizeof(int) << " bytes";
-    qInfo() << "Size of short int : " << sizeof(short int) << " bytes";
-    qInfo() << "Size of long int : " << sizeof(long int) << " bytes";
-    qInfo() << "Size of signed long int : " << sizeof(signed long int)
-            << " bytes";
-    qInfo() << "Size of unsigned long int : " << sizeof(unsigned long int)
-            << " bytes";
+    qInfo() << "Size of signed long int : " << sizeof(signed long int) << " bytes";
+    qInfo() << "Size of signed short int : " << sizeof(signed short int) << " bytes";
+    qInfo() << "Size of unsigned long int : " << sizeof(unsigned long int) << " bytes";
+    qInfo() << "Size of unsigned short int : " << sizeof(unsigned short int) << " bytes";
+    qInfo() << "signed int minimum value: " << INT_MIN ;
+    qInfo() << "signed int maximum value: " << INT_MAX ;
+    qInfo() << "char maximum value: " << CHAR_MAX ;
     qInfo() << "Size of float : " << sizeof(float) << " bytes";
     qInfo() << "Size of double : " << sizeof(double) << " bytes";
     qInfo() << "Size of wchar_t : " << sizeof(wchar_t) << " bytes";

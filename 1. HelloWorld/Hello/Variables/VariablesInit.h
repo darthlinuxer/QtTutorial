@@ -9,4 +9,6 @@ int sumPointers(int *a, int *b);
 int sumArray(int arr[], int size);
 int Invoke(int x, int y, int (*func)(int, int));
 
+enum MyCustomColorEnum { red, green, blue };
+
 #endif // VARIABLESINIT_H
