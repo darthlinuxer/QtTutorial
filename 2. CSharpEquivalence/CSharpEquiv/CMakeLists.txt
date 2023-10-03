@@ -16,7 +16,8 @@ add_executable(CSharpEquiv
   main.cpp
   Lambdas.h
   Lambdas.cpp
-
+  Events.cpp
+  Events.h
 )
 target_link_libraries(CSharpEquiv Qt${QT_VERSION_MAJOR}::Core)
 

@@ -1,4 +1,5 @@
 #include "Lambdas.h"
+#include "Events.h"
 #include <QCoreApplication>
 #include <QTimer>
 #include <QDebug> //required for qInfo() command;
@@ -10,8 +11,8 @@ void PrintMenu(){
     QTextStream qout(stdout);
     QString menu = "\n Menu: "
                   "\n 0. Exit "
-                  "\n 1. Process Lambdas, Actions and Funcs"
-                  "\n 2. Process Events"
+                  "\n 1. Lambdas, Actions and Funcs"
+                  "\n 2. Events"
                   "\n 3. Tuples"
                   "\n 4. Interfaces"
                   "\n 5. Linq"
@@ -42,6 +43,10 @@ void readInput() {
       case 1:
         system("cls"); //cls only works on windows to clear the console
         LambdaExamples();
+        break;
+      case 2:
+        system("cls"); // cls only works on windows to clear the console
+        EventExample();
         break;
       }
       qInfo() << "Press any key to continue...";
