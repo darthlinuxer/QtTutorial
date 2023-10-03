@@ -40,6 +40,7 @@ void readInput() {
         QCoreApplication::quit();
         break;
       case 1:
+        system("cls"); //cls only works on windows to clear the console
         LambdaExamples();
         break;
       }
