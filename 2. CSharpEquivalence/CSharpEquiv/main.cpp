@@ -1,9 +1,9 @@
-#include <QThread>
 #include "Lambdas.h"
 #include <QCoreApplication>
-#include <iostream>
-#include <string>
 #include <QTimer>
+#include <QDebug> //required for qInfo() command;
+#include <iostream> //required for input output
+#include <thread>
 
 void PrintMenu(){
     QTextStream qin(stdin);
@@ -43,11 +43,27 @@ void readInput() {
         LambdaExamples();
         break;
       }
+      qInfo() << "Press any key to continue...";
+      qin.readLine();
     } while (choice != 0);
 }
 
+/*!
+ Console Program with Menu
+ * \brief main
+ * \param argc
+ * \param argv
+ * \return
+ */
 int main(int argc, char *argv[]) {
-    QCoreApplication a(argc, argv);
+    QCoreApplication a(argc, argv); //this is automatically added with every new project
+
+    std::string name; //variable definition
+    qInfo("Hello, what's your name ?");
+    std::cin >> name; //Reading from the terminal
+    qInfo() << "Hello" << QString::fromStdString(name);
+    std::this_thread::sleep_for(std::chrono::seconds(1)); //Time Delay
+
     //wanna see how a timer works ?
     QTimer::singleShot(1000, &a, [](){ //miliseconds, context, lambda function
         readInput();
