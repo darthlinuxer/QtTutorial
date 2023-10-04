@@ -66,6 +66,19 @@ void BasicLambdas() {
     auto is_even = [](int n) { return n % 2 == 0; };
     qInfo() << "Type of Predicate = " << typeid(is_even).name();
     qInfo() << "Is 2 Even ? " << is_even(2);
+
+    // Lambda function (internal method) that takes a function pointer as an argument
+    auto internalMethodReturningValue = [](int (*funcPtr)(int, int), int x, int y) {
+        return funcPtr(x,y);
+    };
+
+    auto internalMethodNotReturningValue = [](void (*funcPtr)(int, int), int x, int y) {
+        funcPtr(x,y);
+    };
+
+    auto result = internalMethodReturningValue(Add, 2, 3);
+    qInfo() << "2+3 = "<< result;
+    internalMethodNotReturningValue(AddInternally, 2, 3);
 }
 
 void LambdaExamples(){

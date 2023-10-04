@@ -12,18 +12,18 @@ void PrintMenu(){
     QTextStream qin(stdin);
     QTextStream qout(stdout);
     QString menu = "\n Menu: "
-                  "\n 0. Exit "
-                  "\n 1. Lambdas, Actions and Funcs"
-                  "\n 2. Events"
-                  "\n 3. Tuples"
-                  "\n 4. OOP"
-                  "\n 5. Linq"
-                  "\n 6. Async Await"
-                  "\n 7. Extension Methods"
-                  "\n 8. Try Catch and Exception Handling"
-                  "\n 9. Reflection"
-                  "\n 10. Attributes"
-                  "\n Enter your Choice: \n";
+                   "\n 0. Exit "
+                   "\n 1. Lambdas, Actions and Funcs"
+                   "\n 2. Events"
+                   "\n 3. Tuples"
+                   "\n 4. OOP"
+                   "\n 5. Linq"
+                   "\n 6. Async Await"
+                   "\n 7. Extension Methods"
+                   "\n 8. Try Catch and Exception Handling"
+                   "\n 9. Reflection"
+                   "\n 10. Attributes"
+                   "\n Enter your Choice: \n";
     qout << menu;
     qout.flush();
 }
