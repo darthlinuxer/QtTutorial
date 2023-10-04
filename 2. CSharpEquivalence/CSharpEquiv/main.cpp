@@ -1,5 +1,7 @@
 #include "Lambdas.h"
 #include "Events.h"
+#include "Tuples.h"
+#include "OOP.h"
 #include <QCoreApplication>
 #include <QTimer>
 #include <QDebug> //required for qInfo() command;
@@ -14,7 +16,7 @@ void PrintMenu(){
                   "\n 1. Lambdas, Actions and Funcs"
                   "\n 2. Events"
                   "\n 3. Tuples"
-                  "\n 4. Interfaces"
+                  "\n 4. OOP"
                   "\n 5. Linq"
                   "\n 6. Async Await"
                   "\n 7. Extension Methods"
@@ -45,8 +47,16 @@ void readInput() {
         LambdaExamples();
         break;
       case 2:
-        system("cls"); // cls only works on windows to clear the console
+        system("cls");
         EventExample();
+        break;
+      case 3:
+        system("cls");
+        useTuple();
+        break;
+      case 4:
+        system("cls");
+        OOPExample();
         break;
       }
       qInfo() << "Press any key to continue...";
