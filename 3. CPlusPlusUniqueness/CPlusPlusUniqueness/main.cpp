@@ -106,6 +106,22 @@ int main(int argc, char *argv[])
     Person p2 = createObjectOnStack("Camilo OnStack"); // Receive a copy of the object
     qDebug() << "External Stack person : " << p2; // Use the copy
 
-
+    qInfo() << "\n Heap Person was expected to have the same memory address but Stack no!"
+               "\nCheck the addresses of the Stack Person inside and "
+               "outside: Why are they the same ? \n\n";
+    QString explanation =
+        "In C++, when you return an object by value, the compiler often optimizes away "
+        "the actual copy operation, a technique known as Return Value Optimization (RVO). "
+        "This is a standard compiler optimization to avoid the overhead of copying an object"
+        "from the function's stack frame to the calling function's stack frame. Instead, the compiler"
+        " constructs the object directly in the memory location where it will "
+        "be used by the calling function."
+        "In this case, stackObj is constructed directly in the memory location "
+        "for p2, so they end up having the"
+        "same address. This is why you see the same address for both stackObj and p2."
+        " This is an optimization, and according to the C++ standard, the "
+        "compiler is allowed to perform this as"
+        "long as the program's observable behavior remains unchanged (the as-if rule).";
+    qInfo() << explanation;
     return a.exec();
 }
