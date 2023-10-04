@@ -27,10 +27,18 @@ public:
     virtual void MakeSound() = 0;
 };
 
-class IAnimal: public IMovable, public IMakeSound {};
-class IDestroyableAnimal: public IAnimal {
-public:
-    virtual ~IDestroyableAnimal() = 0;
+class IAnimal : public IMovable, public IMakeSound {};
+class IDestroyableAnimal : public IAnimal {
+  public:
+    /*
+        In C++, even pure virtual destructors need a definition.
+        This is because the destructor of the base class is always called when a derived
+        object is destroyed. When you delete an object through a pointer to a base
+        class, the base class destructor is called after the derived class destructor.
+        THEN.. EVEN THOUGH WE ARE TRYING TO MIMIC A C# INTERFACE, THIS IS NOT AN
+        INTERFACE.. IT IS A CLASS
+*/
+    virtual ~IDestroyableAnimal() {  cout << "BASE Destructor called " << endl; }
 };
 
 class Janitor : public QObject {
@@ -41,7 +49,12 @@ public slots:
     }
 };
 
-//abstract class Animal
+/*
+ The Animal class is abstract because it inherits from IAnimal, which contains pure virtual functions
+ (Move and MakeSound). Even though Animal provides implementations for these functions,
+ it still inherits the abstract nature of IAnimal. Therefore, you cannot instantiate an object
+ of type Animal directly.
+*/
 class Animal : public QObject, public IAnimal {
     Q_OBJECT
 private:

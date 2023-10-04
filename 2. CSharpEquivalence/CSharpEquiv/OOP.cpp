@@ -20,17 +20,6 @@ Cat::Cat(string name) : Animal(name) {}
 void Cat::MakeSound() { cout << GetName() << " meows." << endl; }
 void Cat::Move() { cout << GetName() << " walks." << endl; }
 
-/*
-In C++, even pure virtual destructors need a definition.
-This is because the destructor of the base class is always called when a derived object is destroyed.
-When you delete an object through a pointer to a base class, the base class destructor is called after
-the derived class destructor.
-THEN.. EVEN THOUGH WE ARE TRYING TO MIMIC A C# INTERFACE, THIS IS NOT AN INTERFACE.. IT IS A CLASS
-*/
-IDestroyableAnimal::~IDestroyableAnimal() {
-    cout << "BASE Destructor called " << endl;
-}
-
 Horse::Horse(string name) : _name(name) {}
 void Horse::MakeSound() { cout << _name << " neighs." << endl; }
 void Horse::Move() { cout << _name << " walks." << endl; }
@@ -38,6 +27,7 @@ Horse::~Horse() { cout << "Destructor called for " << _name << endl; }
 
 
 void OOPExample() {
+
     Animal* myAnimal1 = new Dog("Fido"); //Dog derives from abstract Animal which derives from IAnimal
     Janitor janitor;
     QObject::connect(myAnimal1, SIGNAL(AnimalEvent(string)), &janitor, SLOT(HandleAnimalEvent(string))); //Event
