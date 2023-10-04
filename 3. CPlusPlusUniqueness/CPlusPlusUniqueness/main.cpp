@@ -1,6 +1,23 @@
 #include <QCoreApplication>
 using namespace std;
 
+class Person {
+private:
+    QString _name;
+
+public:
+    Person(QString name) : _name(name) {}
+    void SetName(QString name) { _name = name; }
+    QString GetName() const { return _name; }
+
+    // Overload the << operator for QDebug for stack-allocated objects
+    friend QDebug operator<<(QDebug debug, const Person& person) {
+        QDebugStateSaver saver(debug);
+        debug.nospace() << "Person(Address: " << &person << ", Name: " << person.GetName() << ")";
+        return debug;
+    }
+};
+
 void modifyValue(int *ptr) {
     *ptr = 10; // Modifies the value pointed to by ptr.
 }
@@ -26,18 +43,19 @@ int createIntOnStack() {
 
 //Local created variables cannot outlive the method where it was created..
 //compiler will warn you try to reference it outside
-QObject& createObjectOnStack(string name) {
-    QObject stackObj; // Allocate a QObject on the stack. C++ manages that for us!
-    stackObj.setObjectName(name);
+Person createObjectOnStack(QString name) {
+    Person stackObj(name); // Allocate a QObject on the stack. Don´t use new. C++ manages that for us!
+    stackObj.SetName("aka Darth Linuxer on the Stack"); // hmm Method called like C#
+    qDebug() << stackObj;
     return stackObj; // Return the object.
 }
 
 //everytime you use new, your are allocating on the Heap, not on the stack
-QObject* createObjectOnHeap(string name) {
-    QObject* heapObj = new QObject; // Allocate a QObject on the heap. We will have to manage this!
-    heapObj->setObjectName(name);
-    return heapObj; // Return the pointer.
-    //you created an object and return a pointer to it.. good luck managing its lifecycle now!
+Person* createObjectOnHeap(QString name) {
+    Person* heapObj = new Person(name); // Allocate a QObject on the heap. We will have to manage this!
+    heapObj->SetName("aka Darth Linuxer on the Heap"); //look how pointers reference internal methods using arrow ->
+    qDebug() << *heapObj;
+    return heapObj; // Return the pointer.. good luck managing its lifecycle now! MEMORY LEAK POTENTIAL
 }
 
 int main(int argc, char *argv[])
@@ -77,13 +95,17 @@ int main(int argc, char *argv[])
     qDebug() << "External Stack variable address:" << &copiedstackVarValue;
     delete heapVar; // Don't forget to delete heap-allocated variables!
 
-    auto o1 = createObjectOnHeap("OnHeap");
-    qInfo() << o1;
-    delete o1;
+    qInfo()<<"---------------NOW HEAP and STACK using Person Object--------------";
 
-    //Compiler won´t let you assign the variable below due to scope
-    //error: Call to deleted constructor of 'QObject' which has been explicitly marked deleted here
-    //auto o2 = createObjectOnStack("OnStack");
+    // Heap
+    Person* p1 = createObjectOnHeap("Camilo OnHeap");
+    qDebug() << "External Heap person : " << *p1; // Use pointer directly
+    delete p1;
+
+    // Stack
+    Person p2 = createObjectOnStack("Camilo OnStack"); // Receive a copy of the object
+    qDebug() << "External Stack person : " << p2; // Use the copy
+
 
     return a.exec();
 }
