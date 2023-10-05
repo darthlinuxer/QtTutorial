@@ -18,7 +18,10 @@ public:
     void SetName(QString name) { _name = name; }
     QString GetName() const { return _name; }
 
-    // Overload the << operator for QDebug for stack-allocated objects
+    //Equivalent to operator overload on C#. What this operator will do in conjunction with QDebug
+    //is to create a similar of ToString() on C#..
+    //Basically I am telling C++ how to print the object on the screen if I send it to one of the
+    //QDebug classes like qInfo()
     friend QDebug operator<<(QDebug debug, const Person& person) {
         QDebugStateSaver saver(debug);
         debug.nospace() << "Person(Address: " << &person << ", Name: " << person.GetName() << ")";
