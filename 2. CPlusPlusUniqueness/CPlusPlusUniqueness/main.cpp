@@ -60,6 +60,14 @@ Person* createObjectOnHeap(QString name) {
     return heapObj; // Return the pointer.. good luck managing its lifecycle now! MEMORY LEAK POTENTIAL
 }
 
+
+//Pointers and Addresses are interchangeable
+//See on Main how we can send an address to this method instead of a pointer variable
+void PrintMsg(QString *msg)
+{
+    qInfo() << "Inside method PrintMsg: msg variable received as pointer has this memory addr:" << msg << "  Size:" << msg -> length();
+}
+
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
@@ -84,6 +92,17 @@ int main(int argc, char *argv[])
     qDebug() << "What is reference address ? (should be address of x, because it is same as x)" << &reference;
     modifyReference(reference);
     qDebug() << "After modifyReference:" << x; //this is the same as byRef in C#
+
+    //Pointer and Addresses are interchangeable. A pointer of something receives an adress of otherthings of the same type
+    QString msg = "This is a message to test how an address can be sent to a Method expecting a pointer";
+    qInfo() << "\nTesting how ADDRESS and POINTERS are interchangeable:";
+    qInfo() << "You can send a variable address to any method expecting a Pointer if they are the same type";
+    qInfo() << "Local Msg variable created on Stack has address: " << &msg << "  Size:" << msg.length();
+    PrintMsg(&msg); //I am sending an adress to a method expecting a pointer.. it will compile;
+    qInfo() << "Check how addresses are the same internally and externally of PrintMsg: " << &msg;
+    qInfo() << "It is no different as if you first create the pointer and assigning it to variable address";
+    QString *msgPtr = &msg;
+    PrintMsg(msgPtr);
 
     qInfo() << "-----------------------------HEAP AND STACK ----------------------------------------";
     // Heap
