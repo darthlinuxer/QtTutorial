@@ -1,4 +1,5 @@
 #include <QCoreApplication>
+#include <QObject>
 using namespace std;
 
 class Person {
@@ -7,6 +8,7 @@ private:
 
 public:
     Person(QString name) : _name(name) {}
+
     void SetName(QString name) { _name = name; }
     QString GetName() const { return _name; }
 
@@ -120,7 +122,7 @@ int main(int argc, char *argv[])
         "for p2, so they end up having the"
         "same address. This is why you see the same address for both stackObj and p2."
         " This is an optimization, and according to the C++ standard, the "
-        "compiler is allowed to perform this as"
+        "compiler is allowed to perform this as "
         "long as the program's observable behavior remains unchanged (the as-if rule).";
     qInfo() << explanation;
     return a.exec();

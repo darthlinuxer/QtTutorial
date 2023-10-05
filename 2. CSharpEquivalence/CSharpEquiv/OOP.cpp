@@ -27,14 +27,18 @@ void Horse::Move() { cout << _name << " walks." << endl; }
 
 void OOPExample() {
 
+    Animal::PrintActiveAnimals(); //static method;
     // Creates a DOG object on the HEAP.. which is UNMANAGED memory.
-    Animal* snoopy = new Dog("Fido the Dog on the HEAP"); //Dog derives from abstract Animal which derives from IAnimal
+    Animal* snoopy = new Dog("Snoopy the Dog on the HEAP"); //Dog derives from abstract Animal which derives from IAnimal
     Janitor janitor;
     QObject::connect(snoopy, SIGNAL(AnimalEvent(string)), &janitor, SLOT(HandleAnimalEvent(string))); //Event
     snoopy->MakeSound();
     snoopy->Move();
-    emit snoopy->AnimalEvent("FIDO Pooped");
+    emit snoopy->AnimalEvent("Snoopy Pooped");
+    snoopy->PrintActiveAnimals();
+    snoopy->PrintClassType();
     delete snoopy; //Delete calls the Destructor. IAnimal does not have a destructor and that will be problematic
+    Animal::PrintActiveAnimals();
 
     //Now things will be interesting.. it is possible to call the same methods of an object using pointers and refs
     Cat myCat("Tom the Cat on Stack"); //Just created a Cat on the Stack Memory.. which is managed C++ region.

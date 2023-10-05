@@ -43,7 +43,10 @@ class IDestroyableAnimal : public IAnimal {
 };
 
 class Janitor : public QObject {
-    Q_OBJECT
+    Q_OBJECT //this is a Macro. Macros are a feature of Qt.
+    //Macros are placeholders for code that will be injected by the Qt MOC - Meta Object Compiler
+    //No need to know what MOC is or do, just know that this is needed everytime you need to use
+    //Qt advanced features like signals and slots
 public slots:
     void HandleAnimalEvent(string name) {
         cout << name << " event handled by Janitor." << endl;
@@ -60,17 +63,39 @@ class Animal : public QObject, public IAnimal {
     Q_OBJECT
 private:
     string _name;
+    //inline only available in C++ 17.
+    //without inline you have to manually initialize the value of the variable
+    //Check your version on CMakeLists.txt -> set(CMAKE_CXX_STANDARD 17)
+    static inline int _numberOfAnimals = 0;
+
 public:
-    Animal(string name) : _name(name) {}
-    virtual ~Animal() { cout << "Destructor called for " << _name << endl; }
+    Animal(string name) : _name(name) {
+        _numberOfAnimals++;
+    }
+    virtual ~Animal() {
+        cout << "Destructor called for " << _name << endl;
+        _numberOfAnimals--;
+    }
     virtual void MakeSound() { cout << _name << " makes a sound." << endl; }
     virtual void Move() { cout << _name << " moves." << endl; }
     string GetName() { return _name; }
     void SetName(string name) { _name = name; }
+
+    static void PrintActiveAnimals() { qInfo() << "Current active animals:" << _numberOfAnimals;}
+
+    virtual void PrintClassType() //C# typeof(this).name;
+    {
+        // Using C++ typeid
+        cout << _name << " is class type (C++): " << typeid(*this).name() << endl;
+
+        // Using Qt's metaObject
+        qInfo() << _name << " is class type (Qt):" << this->metaObject()->className();
+    }
 signals:
     void AnimalEvent(string name);
 };
 
+//You can define the methods here like Animal, or leave it to be defined in the .cpp file
 class Dog : public Animal {
 public:
     Dog(string name);
