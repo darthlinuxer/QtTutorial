@@ -35,10 +35,11 @@ class IDestroyableAnimal : public IAnimal {
         This is because the destructor of the base class is always called when a derived
         object is destroyed. When you delete an object through a pointer to a base
         class, the base class destructor is called after the derived class destructor.
-        THEN.. EVEN THOUGH WE ARE TRYING TO MIMIC A C# INTERFACE, THIS IS NOT AN
-        INTERFACE.. IT IS A CLASS
+        LESSON.. EVEN THOUGH WE ARE TRYING TO MIMIC A C# INTERFACE, THIS IS NOT AN
+        INTERFACE.. IT IS A CLASS. ALL CLASSES HAVE A DESTRUCTOR
 */
-    virtual ~IDestroyableAnimal() {  cout << "BASE Destructor called " << endl; }
+    //virtual because this will be overriden in derived classes
+    virtual ~IDestroyableAnimal() {  cout << "IDestroyableAnimal Destructor called " << endl; }
 };
 
 class Janitor : public QObject {
@@ -89,7 +90,9 @@ private:
     string _name;
 public:
     Horse(string name);
-    virtual ~Horse() override;
+    virtual ~Horse() override {
+        cout << "Destructor called for " << _name << endl;
+    }
     void MakeSound() override;
     void Move() override;
 };
