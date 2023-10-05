@@ -1,5 +1,6 @@
 #include <QCoreApplication>
 #include <QObject>
+#include <iostream>
 using namespace std;
 
 class Person {
@@ -7,7 +8,8 @@ private:
     QString _name;
 
 public:
-    Person(QString name) : _name(name) {}
+    Person(QString name) : _name(name) { qInfo() << "Constructor: just created " << name;}
+    ~Person() { qInfo() << "Destructor: just destroyed " << _name; }
 
     void SetName(QString name) { _name = name; }
     QString GetName() const { return _name; }
@@ -68,6 +70,19 @@ void PrintMsg(QString *msg)
     qInfo() << "Inside method PrintMsg: msg variable received as pointer has this memory addr:" << msg << "  Size:" << msg -> length();
 }
 
+void AutoDeleteOnHeapDemonstration(){
+    std::unique_ptr<Person> p3(new Person("Camilo OnHeap again"));
+    qDebug() << *p3;
+    //There is no delete... and there will be no memory leak
+}
+
+void DemonstratingPersonOnStackBeingAutoDeletedByCPluPlus(){
+    Person p2 = createObjectOnStack("Camilo OnStack"); // Receive a copy of the object
+    qDebug() << "External Stack person : " << p2; // Use the copy
+    //See how p2 does not need a delete like p1? objects on Stack are automatically managed by C++
+    //and will be cleaned when the program stops using it.
+}
+
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
@@ -124,25 +139,30 @@ int main(int argc, char *argv[])
     delete p1;
 
     // Stack
-    Person p2 = createObjectOnStack("Camilo OnStack"); // Receive a copy of the object
-    qDebug() << "External Stack person : " << p2; // Use the copy
+    DemonstratingPersonOnStackBeingAutoDeletedByCPluPlus();
+    //The scope of this function will end here.. C++ will clean the stack
+    //See on the logs the call to Destructor: just destroyed  "aka Darth Linuxer on the Stack"...
+    //nobody called that.. c++ did .
 
-    qInfo() << "\nHeap Person was expected to have the same memory address but Stack no!"
-               "\nCheck the addresses of the Stack Person inside and "
-               "outside: Why are they the same ? \n\n";
-    QString explanation =
-        "In C++, when you return an object by value, the compiler often optimizes away "
-        "the actual copy operation, a technique known as Return Value Optimization (RVO). "
-        "This is a standard compiler optimization to avoid the overhead of copying an object"
-        "from the function's stack frame to the calling function's stack frame. Instead, the compiler"
-        " constructs the object directly in the memory location where it will "
-        "be used by the calling function."
-        "In this case, stackObj is constructed directly in the memory location "
-        "for p2, so they end up having the"
-        "same address. This is why you see the same address for both stackObj and p2."
-        " This is an optimization, and according to the C++ standard, the "
-        "compiler is allowed to perform this as "
-        "long as the program's observable behavior remains unchanged (the as-if rule).";
-    qInfo() << explanation;
+    qInfo()
+        << "Note: \n"
+           "a) Heap Person was expected to have the same memory address but Stack no!\n"
+           "b) Check the addresses of the Stack Person inside and outside: Why are they the same ? \n"
+           "- if values are passed by value, C++ is making a copy how address can be the same?\n\n"
+           "Explanation: \n"
+           "In C++, when you return an object by value, the compiler often optimizes away "
+           "the actual copy operation, a technique known as Return Value Optimization (RVO). "
+           "This is a standard compiler optimization to avoid the overhead of copying an object"
+           "from the function's stack frame to the calling function's stack frame. Instead, the compiler"
+           " constructs the object directly in the memory location where it will "
+           "be used by the calling function. In this case, stackObj is constructed directly in the memory "
+           "location for p2, so they end up having the same address. This is why you see the same address for both "
+           "stackObj and p2. This is an optimization, and according to the C++ standard, the "
+           "compiler is allowed to perform this as long as the program's observable behavior remains unchanged (the "
+           "as-if rule).";
+
+    qInfo() << "-----------------------AUTOMATIC MEMORY MANAGEMENT----------------------";
+    qInfo() << "Sure C++ have advanced methods to clean objects allocated on the HEAP when they are not used anymore";
+    AutoDeleteOnHeapDemonstration();
     return a.exec();
 }
