@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
     Person p2 = createObjectOnStack("Camilo OnStack"); // Receive a copy of the object
     qDebug() << "External Stack person : " << p2; // Use the copy
 
-    qInfo() << "\n Heap Person was expected to have the same memory address but Stack no!"
+    qInfo() << "\nHeap Person was expected to have the same memory address but Stack no!"
                "\nCheck the addresses of the Stack Person inside and "
                "outside: Why are they the same ? \n\n";
     QString explanation =
