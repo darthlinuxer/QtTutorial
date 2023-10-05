@@ -1,6 +1,10 @@
 #include <QCoreApplication>
 #include <QObject>
 #include <iostream>
+#include "animal.h"
+#include "dog.h"
+#include "cat.h"
+#include "zoo.h"
 using namespace std;
 
 class Person {
@@ -164,5 +168,25 @@ int main(int argc, char *argv[])
     qInfo() << "-----------------------AUTOMATIC MEMORY MANAGEMENT----------------------";
     qInfo() << "Sure C++ have advanced methods to clean objects allocated on the HEAP when they are not used anymore";
     AutoDeleteOnHeapDemonstration();
+
+    qInfo() << "-------------------AUTOMATICALLY CLEANING LINKED OBJECTS------------------";
+
+    Zoo* zoo = new Zoo(&a); //&a is defined on line 92.. it is this Qt app lifecycle that is now linked to zoo.
+    Dog* dog = new Dog("Snoopy", zoo); //if zoo is destroyed, bye bye Snoopy as well.
+    dog->MakeSound();
+    Cat* cat = new Cat("Garfield", zoo);
+    cat->MakeSound();
+    zoo->AddAnimal(dog);
+    zoo->AddAnimal(cat);
+    for(Animal* animal : zoo->GetAnimals())
+    {
+        animal->Walk();
+    }
+    delete zoo;
+    //Now even if you forget to delete zoo, because zoo was created with a pointer to &a which is this
+    //Qt application defined on line 92:    QCoreApplication a(argc, argv);
+    //when a is destroyed everything is destroyed..
+    //Lesson: When doing compositions, always link the parents... so that when the parent is deleted
+    //all linked components will be deleted as well.
     return a.exec();
 }

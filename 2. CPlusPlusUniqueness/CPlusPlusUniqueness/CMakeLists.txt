@@ -14,6 +14,10 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
 
 add_executable(CPlusPlusUniqueness
   main.cpp
+  animal.h animal.cpp
+  dog.h dog.cpp
+  zoo.h zoo.cpp
+  cat.h cat.cpp
 )
 target_link_libraries(CPlusPlusUniqueness Qt${QT_VERSION_MAJOR}::Core)
 
