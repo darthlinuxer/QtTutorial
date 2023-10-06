@@ -24,9 +24,12 @@ public:
     //QDebug classes like qInfo()
     friend QDebug operator<<(QDebug debug, const Person& person) {
         QDebugStateSaver saver(debug);
+        //The QDebugStateSaver ensures that this change is only temporary and does not affect other uses of
+        //the QDebug object.
         debug.nospace() << "Person(Address: " << &person << ", Name: " << person.GetName() << ")";
         return debug;
     }
+
 };
 
 void modifyValue(int *ptr) {
