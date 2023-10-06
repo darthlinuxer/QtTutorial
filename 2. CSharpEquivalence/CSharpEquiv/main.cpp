@@ -1,3 +1,4 @@
+#include "Collections.h"
 #include "Lambdas.h"
 #include "Events.h"
 #include "Tuples.h"
@@ -17,12 +18,13 @@ void PrintMenu(){
                    "\n 2. Events"
                    "\n 3. Tuples"
                    "\n 4. OOP"
-                   "\n 5. Linq"
-                   "\n 6. Async Await"
-                   "\n 7. Extension Methods"
-                   "\n 8. Try Catch and Exception Handling"
-                   "\n 9. Reflection"
-                   "\n 10. Attributes"
+                   "\n 5. Collections"
+                   "\n 6. Linq"
+                   "\n 7. Async Await"
+                   "\n 8. Extension Methods"
+                   "\n 9. Try Catch and Exception Handling"
+                   "\n 10. Reflection"
+                   "\n 11. Attributes"
                    "\n Enter your Choice: \n";
     qout << menu;
     qout.flush();
@@ -57,6 +59,10 @@ void readInput() {
       case 4:
         system("cls");
         OOPExample();
+        break;
+      case 5:
+        system("cls");
+        CollectionExample();
         break;
       }
       qInfo() << "Press any key to continue...";

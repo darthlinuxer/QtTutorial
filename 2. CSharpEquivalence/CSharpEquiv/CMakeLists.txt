@@ -22,6 +22,8 @@ add_executable(CSharpEquiv
   Tuples.h
   OOP.cpp
   OOP.h
+  Collections.cpp
+  Collections.h
 )
 target_link_libraries(CSharpEquiv Qt${QT_VERSION_MAJOR}::Core)
 
