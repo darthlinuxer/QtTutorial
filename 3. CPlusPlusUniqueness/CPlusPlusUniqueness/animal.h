@@ -63,6 +63,29 @@ public:
     AnimalStatus animalStatus() const; //this is like C# GET
     void setAnimalStatus(AnimalStatus newAnimalStatus); //this is like C# Set
 
+    /*
+     * The inline keyword in C++ is used as a hint to the compiler that it should attempt to generate code
+     * (inline code) for a function directly in place, rather than generating code to call the function
+     * where it is defined.
+     * However, it’s important to note that inline is just a hint to the compiler. The compiler is not obligated
+     * to inline the function and may choose not to do so for various reasons (for example, if the function
+     * is too complex).
+     * */
+    inline std::string AnimalStatusToString(AnimalStatus status)
+    {
+        switch (status)
+        {
+        case alive: return "alive";
+        case hungry: return "hungry";
+        case sleeping: return "sleeping";
+        case tired: return "tired";
+        case happy: return "happy";
+        case sad: return "sad";
+        case thirsty: return "thirsty";
+        case dead: return "dead";
+        default: return "unknown";
+        }
+    }
 
 signals:
     void animalStatusChanged(Animal* animal);

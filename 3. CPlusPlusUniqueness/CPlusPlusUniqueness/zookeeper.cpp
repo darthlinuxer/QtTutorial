@@ -9,7 +9,7 @@ ZooKeeper::ZooKeeper(QObject *parent)
 
 void ZooKeeper::animalStatusChanged(Animal *animal)
 {
-    auto status = animal ->animalStatus();
+    AnimalStatus status = animal ->animalStatus();
     if(status == AnimalStatus::tired){
         qInfo() << "Janitor saw <<"<< animal -> GetName()<<" animal and recommend not to make it walk any further";
     }

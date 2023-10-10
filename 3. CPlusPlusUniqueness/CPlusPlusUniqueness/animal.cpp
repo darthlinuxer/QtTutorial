@@ -2,6 +2,7 @@
 #include <iostream>
 #include <QDebug>
 #include <QVariant>
+#include <QMetaEnum>
 
 using namespace std;
 
@@ -30,6 +31,7 @@ void Animal::setAnimalStatus(AnimalStatus newAnimalStatus)
 {
     if (m_animalStatus == newAnimalStatus)
         return;
+    qInfo() << GetName() << " new status: " << this->AnimalStatusToString(newAnimalStatus);
     m_animalStatus = newAnimalStatus;
     emit animalStatusChanged(this);
 }
@@ -52,6 +54,9 @@ void Animal::increaseHungryLevel(int increaseBy)
         _hungryLevel=100;
     }
     qInfo() << this->GetName() << " Hungry is now at " << _happyLevel;
+    if(_hungryLevel>50) {
+        this->setAnimalStatus(AnimalStatus::hungry);
+    }
 }
 
 int Animal::happyLevel() const
@@ -107,14 +112,12 @@ void Animal::Walk()
 void Animal::Walk(int meters)
 {
     qInfo() << _name << "Animal walked " << meters << "m and stopped";
-    _metersWalked+=meters;
-    if(_metersWalked > 10){
-        //You can set properties directly or using setProperty method
-        //this->setAnimalStatus(AnimalStatus::tired); //setting directly
-        this->setProperty("AnimalStatus", QVariant::fromValue(AnimalStatus::tired));
-        this->increaseHungryLevel(meters*0.5);
-        this->increaseThirst(meters*0.2);
-    }
+    _metersWalked += meters;
+    // You can set properties directly or using setProperty method
+    // this->setAnimalStatus(AnimalStatus::tired); //setting directly
+    this->setProperty("animalStatus", QVariant::fromValue(AnimalStatus::tired));
+    this->increaseHungryLevel(meters * 0.5);
+    this->increaseThirst(meters * 0.2);
 }
 
 string Animal::GetName()
@@ -144,7 +147,7 @@ void Animal::Play()
 
 void Animal::DrinkWater()
 {
-     qInfo() << _name << "Animal is Drinking Water";
+    qInfo() << _name << "Animal is Drinking Water";
     this->_thirst = 0;
 }
 
