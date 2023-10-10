@@ -20,6 +20,7 @@ using namespace std;
 class Animal : public QObject
 {
     Q_OBJECT
+
     std::string _name;
     int _metersWalked = 0;
     int _hungryLevel = 0;

@@ -7,12 +7,15 @@
 using namespace std;
 
 Animal::Animal(string name, QObject *parent): QObject(parent){
+    this->_name = name;
     qInfo() << name << "Animal Created on addr:" << this;
-    connect(&_timer, &QTimer::timeout, this, &Animal::DecreaseHappinessOnIdleTime);
+
+    //Creating a timer to decrease animal happiness on idle time
+    connect(&_timer, &QTimer::timeout, //source
+            this, &Animal::DecreaseHappinessOnIdleTime,
+            Qt::QueuedConnection); //destination
     this->_timer.setInterval(1000);
     this->_timer.start();
-    qInfo() << "Timer started..";
-    this->_name = name;
 }
 
 Animal::~Animal()
@@ -33,6 +36,9 @@ void Animal::setAnimalStatus(AnimalStatus newAnimalStatus)
         return;
     qInfo() << GetName() << " new status: " << this->AnimalStatusToString(newAnimalStatus);
     m_animalStatus = newAnimalStatus;
+    qInfo() << "Animal is " << this->AnimalStatusToString(newAnimalStatus)
+            << ">>>>> NOTIFYING CARETAKER ABOUT THIS "
+               "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
     emit animalStatusChanged(this);
 }
 
@@ -49,12 +55,14 @@ int Animal::hungryLevel() const
 
 void Animal::increaseHungryLevel(int increaseBy)
 {
+    qInfo() << this->GetName() << " Hungriness: " << _hungryLevel <<", and will be increased by " << increaseBy;
     _hungryLevel+=increaseBy;
     if(_hungryLevel>100) {
         _hungryLevel=100;
     }
-    qInfo() << this->GetName() << " Hungry is now at " << _happyLevel;
+    qInfo() << this->GetName() << " Hungry is now at " << _hungryLevel;
     if(_hungryLevel>50) {
+        qInfo() << this->GetName() << " is officially Hungry.. someone has to do something about it";
         this->setAnimalStatus(AnimalStatus::hungry);
     }
 }
@@ -90,13 +98,15 @@ int Animal::thirst() const
 
 void Animal::increaseThirst(int increaseBy)
 {
+    qInfo() << this->GetName() << " Thirst: " << _thirst <<", and will be increased by " << increaseBy;
     _thirst+=increaseBy;
     if(_thirst>100){
         _thirst = 100;
     }
     qInfo() << this->GetName() << " Thirst is now at " << _thirst;
 
-    if(_thirst>50){
+    if(_thirst>=50){
+        qInfo() << this->GetName() << " is officially Thirsty.. someone has to do something about it";
         this->setAnimalStatus(AnimalStatus::thirsty);
     }
 }
@@ -111,8 +121,8 @@ void Animal::Walk()
 
 void Animal::Walk(int meters)
 {
-    qInfo() << _name << "Animal walked " << meters << "m and stopped";
     _metersWalked += meters;
+    qInfo() << _name << "Animal walked " << meters << "m and stopped. Today it walked in total:" << _metersWalked;
     // You can set properties directly or using setProperty method
     // this->setAnimalStatus(AnimalStatus::tired); //setting directly
     this->setProperty("animalStatus", QVariant::fromValue(AnimalStatus::tired));
@@ -143,6 +153,7 @@ void Animal::Play()
     qInfo() << _name << "Animal is Playing";
     this->setAnimalStatus(AnimalStatus::happy);
     this->_happyLevel = 100;
+    this->_timer.stop();
 }
 
 void Animal::DrinkWater()

@@ -16,26 +16,20 @@ void PropertiesAndEventsExample(QCoreApplication& a)
 
     QObject::connect(dog, &Animal::animalStatusChanged,
                      zookeeper, &ZooKeeper::animalStatusChanged,
-                     Qt::QueuedConnection);
+                     Qt::AutoConnection);
     QObject::connect(cat, &Animal::animalStatusChanged,
                      zookeeper, &ZooKeeper::animalStatusChanged,
-                     Qt::QueuedConnection);
+                     Qt::AutoConnection);
 
     dog->MakeSound();
     cat->MakeSound();
-    for (int i = 0; i <= 5; i++) {
-      dog->Walk(i*10);
-      cat->Walk(i*5);
+    for (int i = 1; i <= 5; i++) {
+      qInfo() << "------------------ STEP "<< i <<" of 5 ------------------------------";
+      dog->Walk(i*20);
+      cat->Walk(i*10);
       QThread::sleep(1);
     }
     dog->MakeSound();
     cat->MakeSound();
-    dog->Walk(500);
-    QThread::sleep(1);
-    dog->Walk(500);
-    QThread::sleep(1);
-    cat->Walk(100);
-
-    delete zookeeper;
-
+    //delete zookeeper;
 }

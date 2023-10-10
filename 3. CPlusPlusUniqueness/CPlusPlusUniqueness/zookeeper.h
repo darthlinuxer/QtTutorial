@@ -10,6 +10,7 @@ class ZooKeeper : public QObject
 
 public:
     explicit ZooKeeper(QObject *parent = nullptr);
+    ~ZooKeeper();
 
 public slots:
     void animalStatusChanged(Animal *animal);
