@@ -17,5 +17,5 @@ Cat::~Cat()
 
 void Cat::MakeSound()
 {
-    qInfo() << GetName() << " just said: meow meow meow ";
+    qInfo() << GetName() << " just said: Meow Meow Meow ";
 }

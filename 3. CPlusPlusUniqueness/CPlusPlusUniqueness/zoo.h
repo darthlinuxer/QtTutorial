@@ -19,6 +19,9 @@ public:
 
     QList<Animal*> GetAnimals();
 
+signals:
+    void AnimalAdded(Animal* animal);
+
 };
 
 #endif // ZOO_H

@@ -17,11 +17,14 @@ void EventExample(){
     EventPublisher publisher;
     EventSubscriber subscriber;
 
+//    QObject::connect(&publisher, &EventPublisher::MyEvent,
+//                     &subscriber, // Adding the context object here
+//                     [&subscriber](const QVariant &data) {
+//                       subscriber.OnMyEventReceived(data); // Specify the expected type here
+//                     });
+
     QObject::connect(&publisher, &EventPublisher::MyEvent,
-                     &subscriber,  // Adding the context object here
-                     [&subscriber](const QVariant& data) {
-                         subscriber.OnMyEventReceived(data);  // Specify the expected type here
-                     });
+                     &subscriber,  &EventSubscriber::OnMyEventReceived);
 
 
     publisher.TriggerEvent<int>(42);  // Emit an int

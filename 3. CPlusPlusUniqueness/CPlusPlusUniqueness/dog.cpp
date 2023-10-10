@@ -17,5 +17,5 @@ Dog::~Dog()
 
 void Dog::MakeSound()
 {
-    qInfo() << GetName() << " just said: ooof ooof ooof ";
+    qInfo() << GetName() << " just said: Ooof Ooof Ooof ";
 }

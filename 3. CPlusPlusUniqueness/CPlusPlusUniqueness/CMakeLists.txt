@@ -18,6 +18,11 @@ add_executable(CPlusPlusUniqueness
   dog.h dog.cpp
   zoo.h zoo.cpp
   cat.h cat.cpp
+  PointersAndMemory.h PointersAndMemory.cpp
+  zookeeper.h zookeeper.cpp
+  animalstatus.h
+  PropertiesAndEvents.cpp
+  PropertiesAndEvents.h
 )
 target_link_libraries(CPlusPlusUniqueness Qt${QT_VERSION_MAJOR}::Core)
 
