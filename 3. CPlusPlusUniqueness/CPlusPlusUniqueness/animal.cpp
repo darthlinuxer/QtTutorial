@@ -11,9 +11,12 @@ Animal::Animal(string name, QObject *parent): QObject(parent){
     qInfo() << name << "Animal Created on addr:" << this;
 
     //Creating a timer to decrease animal happiness on idle time
+    //The QTimer object operates within the thread’s event loop, meaning that it won’t run
+    //unless the event loop is running
     connect(&_timer, &QTimer::timeout, //source
             this, &Animal::DecreaseHappinessOnIdleTime,
             Qt::QueuedConnection); //destination
+
     this->_timer.setInterval(1000);
     this->_timer.start();
 }
@@ -121,6 +124,10 @@ void Animal::Walk()
 
 void Animal::Walk(int meters)
 {
+    if(meters >= 100) {
+        qInfo() << "************* Animal DIED of exhaustion **************";
+        emit this->animalDied();
+    }
     _metersWalked += meters;
     qInfo() << _name << "Animal walked " << meters << "m and stopped. Today it walked in total:" << _metersWalked;
     // You can set properties directly or using setProperty method

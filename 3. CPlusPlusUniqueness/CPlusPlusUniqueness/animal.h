@@ -90,6 +90,7 @@ public:
 
 signals:
     void animalStatusChanged(Animal* animal);
+    void animalDied();
 
 public slots:
     void DecreaseHappinessOnIdleTime();
