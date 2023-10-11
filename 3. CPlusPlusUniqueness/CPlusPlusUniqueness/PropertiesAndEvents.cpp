@@ -59,7 +59,11 @@ void PropertiesAndEventsExample(QCoreApplication& a)
 
     dog->MakeSound();
     cat->MakeSound();
-    qInfo() << "==============IF ANIMAL DIED DURING EXECUTION THE SIGNAL WILL BE PROCESSED NOW==========================";
-    qInfo() << "--------------------ONLY NOW THE INTERNAL TIMER IN ANIMAL WILL BEGIN -----------------------------------";
     //delete zookeeper; //UNCOMMENT THIS AND SEE THE DIFFERENCE IN EXECUTION
+    qInfo() << "==================== IF ANIMAL DIED DURING EXECUTION THE SIGNAL WILL BE PROCESSED NOW ==========================";
+    qInfo() << "-------------------- ONLY NOW THE INTERNAL TIMER IN ANIMAL WILL BEGIN IF ANIMAL DIDN'T DIE ---------------------";
+    qInfo() << "Timers, and signals require the current THREAD to finish!";
+    qInfo() << "They are not processed in another thread unlike C# timers and events!";
+    qInfo() << "We have to learn how to create multiple threads in C++";
+    qInfo() <<"=================================================================================================================";
 }
