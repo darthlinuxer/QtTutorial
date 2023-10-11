@@ -14,6 +14,7 @@ WorkerWithThreadEncapsulated::WorkerWithThreadEncapsulated(QObject *parent)
         qInfo() << "Example 4: SUB ThreadId:" << QThread::currentThreadId() << " started";
         m_timer.setInterval(500); // 500ms
         m_timer.start();
+        qInfo() << "Example 4: Starting Timer in the SUB ThreadId:" << QThread::currentThreadId();
       });
   connect(m_thread.get(), &QThread::finished, [](){qInfo() << "Example 4: SUB ThreadId:"<<QThread::currentThreadId()<<" finished";});
   connect(&m_timer, &QTimer::timeout, this, &WorkerWithThreadEncapsulated::DoWork, Qt::QueuedConnection);

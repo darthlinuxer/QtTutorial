@@ -34,21 +34,35 @@ int main(int argc, char *argv[])
     //Executing a method within a thread
     //This allows us to run code in other threads without subclassing QThread like mythread.cpp on this project
     QThread thread2; //created on the stack. C++ will clean the memory
-    Worker* worker = new Worker; //created on the heap
+    Worker* worker = new Worker; //created on the heap. Worker is a normal class derived from QObject
+
+    //Connections
+    //When the thread start...Execute DoWork Method in the Worker
     QObject::connect(&thread2, &QThread::started, worker, &Worker::DoWork, Qt::QueuedConnection);
     //QObject::connect(&thread2, &QThread::started, [worker]{ worker->DoWork();}); //another way of calling DoWork
+
+    //When worker emits signal WorkDone, Quit the Thread IMMMEDIATELLY (DirectConnection)
     QObject::connect(worker, &Worker::WorkDone, &thread2, &QThread::quit, Qt::DirectConnection);
-    QObject::connect(&thread2, &QThread::finished, worker, &Worker::deleteLater, Qt::QueuedConnection); //will delete the worker
+
+    //When the Thread quits, it will emit a finishes Signal, where after it is emitted, Worked will be flagged for deletion
+    QObject::connect(&thread2, &QThread::finished, worker, &Worker::deleteLater, Qt::QueuedConnection);
+
+    //You created a thread, now move what you need to execute within it.
     worker->moveToThread(&thread2);
     thread2.start();
     thread2.wait();
     //no need to delete thread2.. it is on the stack
 
     qInfo() << "Example 4: Design Pattern to encapsulate a thread within an object ==========================";
+    //This way, you don´t have to deal with threads in the main thread cause all the logic will be encapsulated
+    //inside the class.
+    //CREATE A NORMAL CLASS
     WorkerWithThreadEncapsulated* worker2 = new WorkerWithThreadEncapsulated();
     bool workFinished = false;
+    //When the signal WorkDone is emitted, the workfinished variable to true
     QObject::connect(worker2, &WorkerWithThreadEncapsulated::WorkDone,
                      [&]{ workFinished = true;});
+
     while(!workFinished){
         qInfo() << "Example 4: Main Thread awaiting worker to finish";
         QThread::sleep(1);
