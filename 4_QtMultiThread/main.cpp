@@ -48,11 +48,15 @@ int main(int argc, char *argv[])
     WorkerWithThreadEncapsulated* worker2 = new WorkerWithThreadEncapsulated();
     bool workFinished = false;
     QObject::connect(worker2, &WorkerWithThreadEncapsulated::WorkDone,
-                     [&workFinished]{ workFinished = true;});
+                     [&]{ workFinished = true;});
     while(!workFinished){
-        qInfo() << "Awaiting work to finish";
+        qInfo() << "Example 4: Main Thread awaiting worker to finish";
         QThread::sleep(1);
     }
+    delete worker2;
+    //if you don´t delete this worker the thread will continue in the background because the cleanup
+    //will never be called. CleanUp is called upon destruction of the object.
 
+    qInfo() << "Example 4: continuing execution...";
     return a.exec();
 }
