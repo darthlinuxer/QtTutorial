@@ -20,9 +20,9 @@ void PropertiesAndEventsExample(QCoreApplication& a)
                      zookeeper, &ZooKeeper::animalStatusChanged,
                      Qt::AutoConnection);
 
-    //How about make a connection with the Slot in QCoreApplication so
-    //that if an AnimalDied Signal is emited the application will quit
-    //This connection had to be made through lambdas because the slot EXIT
+    //How about make a connection with the Exit Slot in QCoreApplication so
+    //that if an AnimalDied Signal is emited the application will quit ?
+    //This connection had to be made through lambdas because the slot EXIT signature
     //requires an int argument and returns an int
     //Signals and Slots are required to have the same signature and AnimalDied signal
     //does not have any argument and returns a void
@@ -59,5 +59,7 @@ void PropertiesAndEventsExample(QCoreApplication& a)
 
     dog->MakeSound();
     cat->MakeSound();
-    //delete zookeeper;
+    qInfo() << "==============IF ANIMAL DIED DURING EXECUTION THE SIGNAL WILL BE PROCESSED NOW==========================";
+    qInfo() << "--------------------ONLY NOW THE INTERNAL TIMER IN ANIMAL WILL BEGIN -----------------------------------";
+    //delete zookeeper; //UNCOMMENT THIS AND SEE THE DIFFERENCE IN EXECUTION
 }
