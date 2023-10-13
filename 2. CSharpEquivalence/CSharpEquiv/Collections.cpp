@@ -54,10 +54,15 @@ void CollectionExample() {
 
     // QMap = Dictionary in C#
     QMap<QString, int> map = {{"one", 1}, {"two", 2}, {"three", 3}, {"four", 4}, {"five", 5}};
+    map.insert("six",6);
     std::function<bool(const QString&, int&)> predicate2 =  [](const QString& key, int& value){ return value < 3; };
     //PREDICATE ABOVE EVEN THOUGH CORRECTLY DEFINED DIDN´T WORK.. WILL SEARCH FOR A SOLUTION
     //map.removeIf(predicate2);
     qInfo() << "QMap:" << map;
+    foreach(QString key, map.keys())
+    {
+        qInfo() << "key:" << key << "  value:"<< map.value(key);
+    }
 
     // QMultiMap
     QMultiMap<QString, int> multiMap;

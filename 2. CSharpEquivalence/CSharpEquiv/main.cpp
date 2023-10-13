@@ -1,5 +1,6 @@
 #include "Collections.h"
 #include "Casting.h"
+#include "Generics.h"
 #include "Lambdas.h"
 #include "Events.h"
 #include "Tuples.h"
@@ -10,6 +11,7 @@
 #include <QDebug> //required for qInfo() command;
 #include <iostream> //required for input output
 #include <thread>
+#include <QThread>
 
 void PrintMenu(){
     QTextStream qin(stdin);
@@ -23,11 +25,12 @@ void PrintMenu(){
                    "\n 5. Collections"
                    "\n 6. Casting"
                    "\n 7. Try Catch and Exception Handling"
-                   "\n 8. Async Await"
-                   "\n 9. Extension Methods"
-                   "\n 10. Reflection"
-                   "\n 11. Attributes"
-                   "\n 12. Linq"
+                   "\n 8. Generics"
+                   "\n 9. Async Await"
+                   "\n 10. Extension Methods"
+                   "\n 11. Reflection"
+                   "\n 12. Attributes"
+                   "\n 13. Linq"
                    "\n Enter your Choice: \n";
     qout << menu;
     qout.flush();
@@ -75,6 +78,10 @@ void readInput() {
         system("cls");
         ErrorAndExceptionsExample();
         break;
+      case 8:
+        system("cls");
+        GenericsExample();
+        break;
       }
       qInfo() << "Press any key to continue...";
       qin.readLine();
@@ -95,10 +102,11 @@ int main(int argc, char *argv[]) {
     qInfo("Hello, what's your name ?");
     std::cin >> name; //Reading from the terminal. Make sure the project is running in the terminal to work
     qInfo() << "Hello" << QString::fromStdString(name);
-    std::this_thread::sleep_for(std::chrono::seconds(1)); //Time Delay
+    //std::this_thread::sleep_for(std::chrono::seconds(1)); //Time Delay in C++
+    QThread::sleep(1); //Time Delay using Qt
 
     //wanna see how a timer works ?
-    QTimer::singleShot(1000, &a, [](){ //miliseconds, context, lambda function
+    QTimer::singleShot(300, &a, [](){ //miliseconds, context, lambda function
         readInput();
     });
     return a.exec();
