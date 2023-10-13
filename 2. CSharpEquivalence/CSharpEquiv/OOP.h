@@ -53,12 +53,8 @@ public slots:
     }
 };
 
-/*
- The Animal class is abstract because it inherits from IAnimal, which contains pure virtual functions
- (Move and MakeSound). Even though Animal provides implementations for these functions,
- it still inherits the abstract nature of IAnimal. Therefore, you cannot instantiate an object
- of type Animal directly.
-*/
+//Animal defines pure virtual methods from IAnimal, therefore it is not abstract anymore and it can be instantiated
+//but if you add single method as virtual and make it equals 0, it turns the class abstract.
 class Animal : public QObject, public IAnimal {
     Q_OBJECT
 private:

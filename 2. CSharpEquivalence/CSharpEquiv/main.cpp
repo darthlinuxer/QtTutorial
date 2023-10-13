@@ -1,4 +1,5 @@
 #include "Collections.h"
+#include "Casting.h"
 #include "Lambdas.h"
 #include "Events.h"
 #include "Tuples.h"
@@ -19,12 +20,13 @@ void PrintMenu(){
                    "\n 3. Tuples"
                    "\n 4. OOP"
                    "\n 5. Collections"
-                   "\n 6. Linq"
+                   "\n 6. Casting"
                    "\n 7. Async Await"
                    "\n 8. Extension Methods"
                    "\n 9. Try Catch and Exception Handling"
                    "\n 10. Reflection"
                    "\n 11. Attributes"
+                   "\n 12. Linq"
                    "\n Enter your Choice: \n";
     qout << menu;
     qout.flush();
@@ -64,6 +66,10 @@ void readInput() {
         system("cls");
         CollectionExample();
         break;
+      case 6:
+        system("cls");
+        RunCastingExamples();
+        break;
       }
       qInfo() << "Press any key to continue...";
       qin.readLine();
@@ -82,7 +88,7 @@ int main(int argc, char *argv[]) {
 
     std::string name; //variable definition
     qInfo("Hello, what's your name ?");
-    std::cin >> name; //Reading from the terminal
+    std::cin >> name; //Reading from the terminal. Make sure the project is running in the terminal to work
     qInfo() << "Hello" << QString::fromStdString(name);
     std::this_thread::sleep_for(std::chrono::seconds(1)); //Time Delay
 

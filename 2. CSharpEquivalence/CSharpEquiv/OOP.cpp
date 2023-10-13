@@ -50,7 +50,7 @@ void OOPExample() {
     animalRef.Move(); //check how references are used to call internal methods (Like C# using dot)
     emit animalPtr->AnimalEvent("Tom Pooped");
     emit animalRef.AnimalEvent("Tom Pooped again!");
-    //delete animalPtr; // Compiler will allow you to do this but if you do program will crash on runtime
+    //delete animalPtr; // Compiler will allow you to do this but if you uncomment, program will crash on runtime
     //delete animalRef; // Compiler wont allow you do this.
     //The thing is: YOU DO NOT NEED TO DELETE MANAGED OBJECTS ON STACK
     //You should only use delete on pointers that point to objects allocated on the heap using new (check dog above)
