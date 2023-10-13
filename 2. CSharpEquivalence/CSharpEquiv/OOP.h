@@ -97,6 +97,9 @@ public:
     Dog(string name);
     void MakeSound() override;
     void Move() override;
+    void WagTail() {
+        qInfo() << GetName() << " is wagging his tail";
+    }
 };
 
 class Cat : public Animal {
@@ -104,6 +107,9 @@ public:
     Cat(string name);
     void MakeSound() override;
     void Move() override;
+    void Hiss() {
+        qInfo() << GetName() << " is hissing";
+    }
 };
 
 class Horse : public IDestroyableAnimal {
