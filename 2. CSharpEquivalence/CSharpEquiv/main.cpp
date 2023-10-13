@@ -3,6 +3,7 @@
 #include "Lambdas.h"
 #include "Events.h"
 #include "Tuples.h"
+#include "ErrorAndExceptions.h"
 #include "OOP.h"
 #include <QCoreApplication>
 #include <QTimer>
@@ -21,9 +22,9 @@ void PrintMenu(){
                    "\n 4. OOP"
                    "\n 5. Collections"
                    "\n 6. Casting"
-                   "\n 7. Async Await"
-                   "\n 8. Extension Methods"
-                   "\n 9. Try Catch and Exception Handling"
+                   "\n 7. Try Catch and Exception Handling"
+                   "\n 8. Async Await"
+                   "\n 9. Extension Methods"
                    "\n 10. Reflection"
                    "\n 11. Attributes"
                    "\n 12. Linq"
@@ -69,6 +70,10 @@ void readInput() {
       case 6:
         system("cls");
         RunCastingExamples();
+        break;
+      case 7:
+        system("cls");
+        ErrorAndExceptionsExample();
         break;
       }
       qInfo() << "Press any key to continue...";

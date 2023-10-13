@@ -26,6 +26,8 @@ add_executable(CSharpEquiv
   Collections.h
   Casting.cpp
   Casting.h
+  ErrorAndExceptions.cpp
+  ErrorAndExceptions.h
 )
 target_link_libraries(CSharpEquiv Qt${QT_VERSION_MAJOR}::Core)
 
