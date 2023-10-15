@@ -22,7 +22,11 @@ public:
     //is to create a similar of ToString() on C#..
     //Basically I am telling C++ how to print the object on the screen if I send it to one of the
     //QDebug classes like qInfo()
+    //When a function or another class is declared as a friend of a class,
+    //it can access the private and protected members of that class, even though it is not a member
+    //of that class itself.
     friend QDebug operator<<(QDebug debug, const Person& person) {
+        //Saves the settings used by QDebug, and restores them upon destruction
         QDebugStateSaver saver(debug);
         //The QDebugStateSaver ensures that this change is only temporary and does not affect other uses of
         //the QDebug object.
@@ -81,9 +85,48 @@ void PrintMsg(QString *msg)
 }
 
 void AutoDeleteOnHeapDemonstration(){
-    std::unique_ptr<Person> p3(new Person("Camilo OnHeap again"));
-    qDebug() << *p3;
-    //There is no delete... and there will be no memory leak
+    qInfo() << "USING SMART POINTERS:";
+    //SMART POINTERS
+    /*
+     * Only one std::unique_ptr can point to a particular object.
+     * When a std::unique_ptr goes out of scope or is explicitly reset, it automatically
+     * deletes the object it points to.
+     * Use Cases: It is suitable when you have a single, well-defined owner for the object,
+     * and you want to transfer ownership or ensure that there are no multiple pointers trying
+     * to manage the same object.
+     * */
+    unique_ptr<Person> p1 = std::make_unique<Person>("I am Unique");
+    qDebug() << "UNIQUE pointer:" << *p1;
+    unique_ptr<Person> p1a = std::move(p1);
+    qDebug() << "MOVED a UNIQUE pointer:" << *p1a;
+    //qDebug() << *p1; //Compiler will warn you p1 is null because pointer was moved
+
+    /*
+     * shared_ptr represents shared ownership of a dynamically allocated object.
+     * It means multiple std::shared_ptr instances can point to the same object.
+     * The object will be deleted only when the last std::shared_ptr pointing to it is destroyed or reset.
+     * */
+    shared_ptr<Person> p2 = std::make_shared<Person>("I am Shared");
+    qDebug() << "p2: Shared pointer: " << *p2;
+    qDebug() << "p2: Count number of pointers pointing to this object : " << p2.use_count(); //output 1
+
+    shared_ptr<Person> p3(p2);
+    qDebug() << "Action: Creating a p3 passing a p2";
+    qDebug() << "p3: Shared pointer: " << *p3;
+    qDebug() << "p3: Count number of pointers pointing to this object : " << p3.use_count(); //output 2
+    qDebug() << "p2: Count number of pointers pointing to this object : " << p2.use_count(); //output 2
+
+    shared_ptr<Person> p4 = std::move(p2);
+    qDebug() << "Action: p2 was moved to p4!";
+    qDebug() << "p2: Count number of pointers pointing to this object : " << (p2 ? p2.use_count() : 0); //output 0
+    qDebug() << "p3: Count number of pointers pointing to this object : " << p3.use_count(); //output 2
+    qDebug() << "p4: Count number of pointers pointing to this object : " << p4.use_count(); //output 2
+
+    p3.reset();
+    qDebug() << "Action: RESETed p3!";
+    qDebug() << "p3: Count number of pointers pointing to this object : " << p3.use_count(); //output 2
+    qDebug() << "p4: Count number of pointers pointing to this object : " << p4.use_count(); //output 2
+
 }
 
 void DemonstratingPersonOnStackBeingAutoDeletedByCPluPlus(){
@@ -146,6 +189,7 @@ void PointersAndMemoryExample(QCoreApplication& a)
     Person* p1 = createObjectOnHeap("Camilo OnHeap");
     qDebug() << "External Heap person : " << *p1; // Use pointer directly
     delete p1;
+    //qInfo() << p1->GetName(); //Compiler will allow you to do this but p1 is a dangling pointer now.. points to nothing
 
     // Stack
     DemonstratingPersonOnStackBeingAutoDeletedByCPluPlus();
