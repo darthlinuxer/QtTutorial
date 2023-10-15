@@ -7,9 +7,24 @@
 #include "zoo.h"
 using namespace std;
 
+class Tool{
+    QString _name;
+
+public:
+    Tool(QString name):_name(name) { qInfo() << "tool " << name << " created at:" << this; }
+    ~Tool() { qInfo() << "tool " << _name << " destroyed at:" << this;}
+
+    QString GetName(){
+        return this->_name;
+    }
+};
+
 class Person {
 private:
     QString _name;
+    //this field will be used later in automatic memory management example
+    //just to demonstrate how to pass pointer reference to multiple persons
+    QSharedPointer<Tool> _tool;
 
 public:
     Person(QString name) : _name(name) { qInfo() << "Constructor: just created " << name;}
@@ -32,6 +47,12 @@ public:
         //the QDebug object.
         debug.nospace() << "Person(Address: " << &person << ", Name: " << person.GetName() << ")";
         return debug;
+    }
+
+    void GiveTool(QSharedPointer<Tool> tool)
+    {
+        _tool.swap(tool);
+        qInfo() << GetName() << " is using tool " << _tool.data()->GetName() << " tool addr:" << _tool.data();
     }
 
 };
@@ -127,6 +148,20 @@ void AutoDeleteOnHeapDemonstration(){
     qDebug() << "p3: Count number of pointers pointing to this object : " << p3.use_count(); //output 2
     qDebug() << "p4: Count number of pointers pointing to this object : " << p4.use_count(); //output 2
 
+    qInfo() << "We have been using the Standard C++ library so far... but Qt has his pointer library";
+    QScopedPointer<Person> p5(new Person("I am QtScoped"));
+    qInfo() << "p5 name: " << p5.data() << " " << p5.data()->GetName(); // data is how you access the object
+    //QScopedPointer<Person> p5a(p5); //Compiler will not allow this!
+    QSharedPointer<Person> p6(new Person("I am QtShared"));
+    QSharedPointer<Person> p7(p6);
+    qInfo() << "p6 name: " << p6.data() << " " << p6.data()->GetName(); // data is how you access the object
+    qInfo() << "p7 name: " << p7.data() << " " << p7.data()->GetName(); // data is how you access the object
+
+    QSharedPointer<Tool> tool(new Tool("Hammer"));
+    p1a->GiveTool(tool);
+    p4->GiveTool(tool);
+    p5->GiveTool(tool);
+    p7->GiveTool(tool);
 }
 
 void DemonstratingPersonOnStackBeingAutoDeletedByCPluPlus(){

@@ -14,25 +14,51 @@
 void CollectionExample() {
     // QList
     qInfo() << "===================   QList =====================================";
-    QList<int> list = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    QList<int> list = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     list.append(11);
+    list << 12 << 13 << 14 << 15 << 16 << 16 << 16;
     list.prepend(0);
+    qInfo() << list;
+    qInfo() << "length, size, and count, are the same: " << list.length() << " "<< list.size() << " " << list.count();
+    qInfo() << "But count can be used to count a specific item in the list: counting 16:" << list.count(16);
     list.removeAt(0);
+    list.remove(16); //remove a single 16
+    list.removeAll(16); //remove all 16
+    list.replace(15,99);
+    qInfo() << "removed one of the 0's at position 0, removed all 16, and replaced 15 by 99 \n" << list;
+    qInfo() << "At position 2 get 5 items inclusive: " << list.sliced(2,5);
     std::function<bool(int)> predicate1 =  [](int value){ return value > 3; };
     list.removeIf(predicate1);
-    qInfo() << "Filtered QList:" << list;
+    qInfo() << "Removed all values above 3 ->" << list;
+    list.clear();
+    qInfo() << "Cleared list: " << list.length() << " "<< list.size() << " " << list.count();
 
     // Readonly Collection
     const QList<int> constList = list;
     qInfo() << "Readonly QList:" << constList;
 
     // QVector
-    qInfo() << "===================   QVector =====================================";
-    QVector<int> vector = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    vector.append(11);
+    qInfo() << "===================   QVector is the same as QList ===========================";
+    QVector<int> vector;
+    vector << 1 << 2 << 3 << 4 << 5;
     qInfo() << "QVector:" << vector;
     for(int &value : vector) { value *= 2; }
     qInfo() << "Transformed QVector:" << vector;
+
+    // QSet
+    qInfo() << "===================   QStringList inherits from QList ============";
+    QStringList strings = {"Camilo","was","here"};
+    qInfo() << strings ;
+    strings.replaceInStrings("a","@");
+    strings.sort();
+    qInfo() << "Replace all a's for @ and sorted: " << strings ;
+    QString text = strings.join(" ");
+    qInfo() << text;
+    qInfo() << "Filtered all words with C:" << strings.filter("C");
+    qInfo() << "Does it contain C@milo ? " << strings.contains("C@milo");
+    qInfo() <<" Position: " << strings.indexOf("C@milo");
+    qInfo() <<" Value: " << strings.at(strings.indexOf("C@milo"));
+
 
     // QStack
     qInfo() << "===================   QStack =====================================";
@@ -53,15 +79,24 @@ void CollectionExample() {
     qInfo() << "QQueue:" << queue;
 
     // QSet
-    qInfo() << "===================   QSet =====================================";
-    QSet<int> set = {20, 1, 5, 2, 3, 4, 5, 5, 5, 5, 6, 7, 7, 8, 8, 9, 9, 10};
-    set.removeIf(predicate1);
-    qInfo() << "QSet:" << set;
+    qInfo() << "===================   QSets are very fast because they make a hash under the hood ============";
+    QSet<QString> set = {"Camilo","was","here"};
+    qInfo() << set ;
+    qInfo() << "Does it contain camilo ? " << set.contains("Camilo");
+    set << "again";
+    set << "Camilo"; //this will not be added because it is already in the Set
+    qInfo() << "Does this order make sense? " << set;
+    qInfo() << "Sets order things according to its internal hash";
+    set.insert("2023"); //it will add where it wants.. not necessarily in the beginning or the end
+    qInfo() << "Added 2023: " << set;
 
     // QMap = Dictionary in C#
     qInfo() << "===================   QMap =====================================";
     QMap<QString, int> map = {{"one", 1}, {"two", 2}, {"three", 3}, {"four", 4}, {"five", 5}};
     map.insert("six",6);
+    //Unlike C# you can add a key that does not exist simply by setting it
+    map["seven"]=7;
+
     std::function<bool(const QString&, int&)> predicate2 =  [](const QString& key, int& value){ return value < 3; };
     //PREDICATE ABOVE EVEN THOUGH CORRECTLY DEFINED DIDN´T WORK.. WILL SEARCH FOR A SOLUTION
     //map.removeIf(predicate2);
@@ -76,8 +111,8 @@ void CollectionExample() {
     //You will have to manually take care of the pointers
     QMap<int,QObject*> map2 = {{1, new QObject}, {2, new QObject}};
     qInfo() << "map object counter: " << map2.count();
-    qDeleteAll(map2); // Deleting pointers
-    qInfo() << "qDeleteAll: map2 object counter: " << map2.count(); // count is still 2
+    qDeleteAll(map2); // calls Delete C++ operator on all pointers in the list
+    qInfo() << "qDeleteAll: map2 object counter: " << map2.count(); // count is still 2 why ?
     // Accessing deleted pointers (dangling pointers)
     // qInfo() <<  map2.value(1); // undefined behavior : this might crash the program
     // delete map2.value(1); // crash or undefined behavior // Double deletion
