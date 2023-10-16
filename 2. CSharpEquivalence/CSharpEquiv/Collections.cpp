@@ -11,6 +11,16 @@
 #include "Collections.h"
 #include "qobject.h"
 
+class MyClass {
+public:
+  MyClass() {
+    qInfo() << "An Object of type MyClass was created at : " << this;
+  }
+  ~MyClass() {
+    qInfo() << "An Object of type MyClass was destroyed at : " << this;
+  }
+};
+
 void CollectionExample() {
     // QList
     qInfo() << "===================   QList =====================================";
@@ -59,6 +69,19 @@ void CollectionExample() {
     qInfo() <<" Position: " << strings.indexOf("C@milo");
     qInfo() <<" Value: " << strings.at(strings.indexOf("C@milo"));
 
+    qInfo() << "===================   QList with with OBJECTS ================";
+    QList<MyClass*> list2 = {new MyClass, new MyClass};
+    qInfo() << "List of MyClass objs: Action: Just created : count : " << list2.count();
+    qDeleteAll(list2);
+    qInfo() << "List of MyClass objs: Action: after qDeleteAll : count : " << list2.count();
+    list2.clear();
+    qInfo() << "List of MyClass objs: Action: after clear the list: count() : " << list2.count();
+
+    qInfo() << "===================   QList with QSharedPointer to deal with OBJECTS ================";
+    QList<QSharedPointer<MyClass>> list3 = {QSharedPointer<MyClass>(), QSharedPointer<MyClass>()};
+    qInfo() << "List of SharedPointers of MyClass objs: Action: Just created : count : " << list3.count();
+    list3.clear();
+    qInfo() << "List of SharedPointers of MyClass objs: Action: after clear the list: count() : " << list3.count();
 
     // QStack
     qInfo() << "===================   QStack =====================================";
