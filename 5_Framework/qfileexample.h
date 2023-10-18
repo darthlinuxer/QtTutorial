@@ -7,18 +7,32 @@
 
 class QFileExample
 {
+    void Write(QFile &file, QString message)
+    {
+        if(!file.isWritable()) return;
+
+        QTextStream stream(&file);
+        stream.setEncoding(QStringConverter::Utf8);
+        stream.seek(file.size()); //go to the end of the file;
+        stream << "\n" << message;
+        stream.flush();
+        //Execute this again and see that the text is being appended
+    }
+
     void ReadAll(QFile &file)
     {
         qInfo() << "------- Read all: not recommended for large files -----";
         if(!file.isReadable()) return;
-        file.seek(0);
+
+        file.seek(0); //go to the beggining of the file;
         qInfo() << file.readAll(); //this is going to print raw data unformatted
     }
 
     void ReadLines(QFile &file){
         qInfo() << "------- Read Lines: recommended for large files -----";
         if(!file.isReadable()) return;
-        file.seek(0);
+
+        file.seek(0); //go to the beggining of the file;
         QTextStream in(&file);
         while (!in.atEnd()) {
             qInfo() << in.readLine(); //will read up to the first \n
@@ -28,10 +42,11 @@ class QFileExample
     void ReadChunks(QFile &file, int numberOfChars){
         qInfo() << "------------------- Read Chunks --------------------";
         if(!file.isReadable()) return;
-        file.seek(0);
-        QTextStream in(&file);
-        while (!in.atEnd()) {
-            qInfo() << in.read(numberOfChars);
+
+        file.seek(0); //go to the beggining of the file;
+        QTextStream stream(&file);
+        while (!stream.atEnd()) {
+            qInfo() << stream.read(numberOfChars);
         }
     }
 
@@ -80,6 +95,9 @@ public:
 
         qInfo() << "Wrote special chars!";
         qInfo() << "File Pos: " << file.pos();
+
+        //Everything above will overwrite whatever is in the file
+        Write(file, QString("This is another way of writing!")); //but this will append
 
         ReadAll(file);
         ReadLines(file);

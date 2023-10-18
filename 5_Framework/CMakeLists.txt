@@ -17,6 +17,7 @@ add_executable(5_Framework
   settingsexample.h
   qbufferexample.h
   qfileexample.h
+  qdatastreamexample.h
 )
 target_link_libraries(5_Framework Qt${QT_VERSION_MAJOR}::Core)
 

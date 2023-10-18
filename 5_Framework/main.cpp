@@ -2,6 +2,7 @@
 #include "settingsexample.h"
 #include "qbufferexample.h"
 #include "qfileexample.h"
+#include "qdatastreamexample.h"
 
 int main(int argc, char *argv[])
 {
@@ -20,6 +21,9 @@ int main(int argc, char *argv[])
     QFileExample fileExample;
     fileExample.RunExample();
 
+    //QDataStream saves data as binary to file
+    QDataStreamExample datastreamExample;
+    datastreamExample.RunExample();
 
 
     return a.exec();
