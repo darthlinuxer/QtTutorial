@@ -19,12 +19,13 @@ int main(int argc, char *argv[])
 
     //QFile inherits from QIO and stores data in file
     QFileExample fileExample;
-    fileExample.RunExample();
+    fileExample.RunExample(a);
 
     //QDataStream saves data as binary to file
     QDataStreamExample datastreamExample;
     datastreamExample.RunExample();
 
+    fileExample.RunExampleWithLock();
 
     return a.exec();
 }

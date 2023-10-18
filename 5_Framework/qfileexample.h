@@ -1,12 +1,19 @@
 #ifndef QFILEEXAMPLE_H
 #define QFILEEXAMPLE_H
 
+#include "qcoreapplication.h"
 #include <QDebug>
 #include <QFile>
 #include <QDateTime>
+#include <QDir>
+#include <QStorageInfo>
+#include <QThread>
+#include <QLockFile>
 
-class QFileExample
+class QFileExample: public QObject
 {
+    Q_OBJECT
+    inline static int subdir = 0;
     void Write(QFile &file, QString message)
     {
         if(!file.isWritable()) return;
@@ -50,6 +57,41 @@ class QFileExample
         }
     }
 
+    void TreeList(QDir& root)
+    {
+        subdir++;
+        QString separator;
+        separator = separator.fill('-',subdir);
+        foreach (QFileInfo fi,
+                 root.entryInfoList(QDir::Filter::AllEntries |
+                                    QDir::Filter::NoDotAndDotDot,
+                                    QDir::SortFlag::DirsFirst)) {
+            if(fi.isDir())
+            {
+
+                qInfo() << separator << "Dir: " << fi.filePath();
+                //QDir child(fi.filePath());
+                //TreeList(child);
+            }
+            if(fi.isFile()) qInfo() << separator << "File: " << fi.fileName();
+        }
+        subdir--;
+    }
+
+    void DiskSpace(){
+        qInfo() << "-------------------Disk Space-------------------------------------";
+        foreach(QStorageInfo storage, QStorageInfo::mountedVolumes())
+        {
+            qInfo() << "Name: " << storage.name();
+            qInfo() << "FileSystem: " << storage.fileSystemType();
+            qInfo() << "Total Bytes: " << storage.bytesTotal()/1000/1000 << "Mb";
+            qInfo() << "Free Space: " << storage.bytesAvailable()/1000/1000 << "Mb";
+            qInfo() << "Device: " << storage.device();
+            qInfo() << "Root: " << storage.isRoot();
+            qInfo() << "\n";
+        }
+    }
+
 
 public:
     QFileExample(){
@@ -59,7 +101,7 @@ public:
         qInfo() << "QFileExample destroyed at:" << this;
     }
 
-    void RunExample()
+    void RunExample(QCoreApplication &a)
     {
         qInfo() << "============== QFile Example ==============================";
         QString filename = "test.txt"; //will write to the local project dir
@@ -101,9 +143,51 @@ public:
 
         ReadAll(file);
         ReadLines(file);
-        ReadChunks(file,25);
+        ReadChunks(file,100);
 
         file.close();
+
+        qInfo()<< "---------------------Listing Parent Directories-------------------------";
+        QDir dir(a.applicationDirPath());
+        //dir.cdUp(); //move up to parent directory
+        TreeList(dir);
+
+        qInfo()<< "---------------------DISK Info------------------------------------------";
+        QStorageInfo root = QStorageInfo::root();
+        qInfo() << "root: " << root.rootPath();
+        //DiskSpace();
+    }
+
+    void RunExampleWithLock() {
+        qInfo() << "============== QLockFile Example ==============================";
+        QString path = QDir::currentPath() + QDir::separator() + "test.txt";
+        QFile file(path);
+        QLockFile lock(file.fileName()+'l');
+        lock.setStaleLockTime(15000); //in 10 seconds it will unlock automatically if you forget
+        if(lock.tryLock())
+        {
+            qInfo() << "Reading from file...";
+            if(!file.open(QIODevice::ReadOnly)) //another important mode is QIODevice::Append
+            {
+                qInfo() << "Error: " << file.errorString();
+                return;
+            }
+            ReadLines(file);
+            //lock.unlock();
+        } else
+        {
+            qInfo() << "Could not lock the file...";
+            qint64 pid;
+            QString host;
+            QString application;
+            if(lock.getLockInfo(&pid, &host, &application)){
+                qInfo() << "The file is locked by process id:" << pid;
+                qInfo() << "Host: " << host;
+                qInfo() <<"Application: " << application;
+            } else {
+                qInfo() << "File is locked but can't get the info by whom!";
+            }
+        }
     }
 };
 
