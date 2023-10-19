@@ -10,6 +10,7 @@
 #include <QDebug>
 #include "Collections.h"
 #include "qobject.h"
+#include <QRandomGenerator>
 
 class MyClass {
 public:
@@ -43,9 +44,25 @@ void CollectionExample() {
     list.clear();
     qInfo() << "Cleared list: " << list.length() << " "<< list.size() << " " << list.count();
 
+    list.reserve(10); //attempts to allocate memory to this number of elements
+    for(int i=0;i<10;i++) {list.push_front(QRandomGenerator::global()->bounded(1000));}
+
+    qInfo() << "Unsorted List: " << list;
+    std::sort(list.begin(), list.end());
+    qInfo() << "Sorted List: " << list;
+    std::reverse(list.begin(), list.end());
+    qInfo() << "Reverse List: " << list;
+
     // Readonly Collection
     const QList<int> constList = list;
     qInfo() << "Readonly QList:" << constList;
+    qInfo() << "IsEqual reverse and readonly ?" << std::equal(list.begin(), list.end(), constList.begin());
+
+    //Copying
+    QList<int> list2;
+    list2.resize(list.size());
+    std::copy(list.begin(), list.end(), list2.begin());
+    qInfo() << "IsEqual list and its copy ?" << std::equal(list.begin(), list.end(), list2.begin());
 
     // QVector
     qInfo() << "===================   QVector is the same as QList ===========================";
@@ -70,18 +87,18 @@ void CollectionExample() {
     qInfo() <<" Value: " << strings.at(strings.indexOf("C@milo"));
 
     qInfo() << "===================   QList with with OBJECTS ================";
-    QList<MyClass*> list2 = {new MyClass, new MyClass};
-    qInfo() << "List of MyClass objs: Action: Just created : count : " << list2.count();
-    qDeleteAll(list2);
-    qInfo() << "List of MyClass objs: Action: after qDeleteAll : count : " << list2.count();
-    list2.clear();
-    qInfo() << "List of MyClass objs: Action: after clear the list: count() : " << list2.count();
+    QList<MyClass*> list3 = {new MyClass, new MyClass};
+    qInfo() << "List of MyClass objs: Action: Just created : count : " << list3.count();
+    qDeleteAll(list3);
+    qInfo() << "List of MyClass objs: Action: after qDeleteAll : count : " << list3.count();
+    list3.clear();
+    qInfo() << "List of MyClass objs: Action: after clear the list: count() : " << list3.count();
 
     qInfo() << "===================   QList with QSharedPointer to deal with OBJECTS ================";
-    QList<QSharedPointer<MyClass>> list3 = {QSharedPointer<MyClass>(), QSharedPointer<MyClass>()};
-    qInfo() << "List of SharedPointers of MyClass objs: Action: Just created : count : " << list3.count();
-    list3.clear();
-    qInfo() << "List of SharedPointers of MyClass objs: Action: after clear the list: count() : " << list3.count();
+    QList<QSharedPointer<MyClass>> list4 = {QSharedPointer<MyClass>(), QSharedPointer<MyClass>()};
+    qInfo() << "List of SharedPointers of MyClass objs: Action: Just created : count : " << list4.count();
+    list4.clear();
+    qInfo() << "List of SharedPointers of MyClass objs: Action: after clear the list: count() : " << list4.count();
 
     // QStack
     qInfo() << "===================   QStack =====================================";

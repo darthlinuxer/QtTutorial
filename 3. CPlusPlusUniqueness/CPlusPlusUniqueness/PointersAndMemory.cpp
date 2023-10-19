@@ -80,6 +80,8 @@ int createIntOnStack() {
     return stackVar; // Return the value.
 }
 
+int someDummyMethodThatReturnsAnInt(int a, int b) { return a+b; }
+
 //Local created variables cannot outlive the method where it was created..
 //compiler will warn you try to reference it outside
 Person createObjectOnStack(QString name) {
@@ -164,7 +166,7 @@ void AutoDeleteOnHeapDemonstration(){
     p7->GiveTool(tool);
 }
 
-void DemonstratingPersonOnStackBeingAutoDeletedByCPluPlus(){
+void DemonstratingPersonOnStackBeingAutoDeletedByCPlusPlus(){
     Person p2 = createObjectOnStack("Camilo OnStack"); // Receive a copy of the object
     qDebug() << "External Stack person : " << p2; // Use the copy
     //See how p2 does not need a delete like p1? objects on Stack are automatically managed by C++
@@ -227,7 +229,7 @@ void PointersAndMemoryExample(QCoreApplication& a)
     //qInfo() << p1->GetName(); //Compiler will allow you to do this but p1 is a dangling pointer now.. points to nothing
 
     // Stack
-    DemonstratingPersonOnStackBeingAutoDeletedByCPluPlus();
+    DemonstratingPersonOnStackBeingAutoDeletedByCPlusPlus();
     //The scope of this function will end here.. C++ will clean the stack
     //See on the logs the call to Destructor: just destroyed  "aka Darth Linuxer on the Stack"...
     //nobody called that.. c++ did .
@@ -272,4 +274,8 @@ void PointersAndMemoryExample(QCoreApplication& a)
     //when a is destroyed everything is destroyed..
     //Lesson: When doing compositions, always link the parents... so that when the parent is deleted
     //all linked components will be deleted as well.
+
+    qInfo() << "------------------CALLING A METHOD THROUGH A POINTER-----------------------";
+    int (*funcPtr)(int,int) = &someDummyMethodThatReturnsAnInt;
+    qInfo() << "Calling a pointer to a Sum method and passing 2,3 as argument = " << (*funcPtr)(2,3);
 }

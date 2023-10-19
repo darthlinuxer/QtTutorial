@@ -3,6 +3,8 @@
 #include "qbufferexample.h"
 #include "qfileexample.h"
 #include "qdatastreamexample.h"
+#include "qlogexample.h"
+#include "Logger.h"
 
 int main(int argc, char *argv[])
 {
@@ -26,6 +28,16 @@ int main(int argc, char *argv[])
     datastreamExample.RunExample();
 
     fileExample.RunExampleWithLock();
+
+    //Log Example
+    QLogExample logExample;
+    logExample.RunExample();
+
+    Logger::Attach();
+    qInfo() << "Hello , I am being logged!";
+    Logger::Detach();
+
+
 
     return a.exec();
 }

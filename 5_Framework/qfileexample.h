@@ -163,16 +163,16 @@ public:
         QString path = QDir::currentPath() + QDir::separator() + "test.txt";
         QFile file(path);
         QLockFile lock(file.fileName()+'l');
-        lock.setStaleLockTime(15000); //in 10 seconds it will unlock automatically if you forget
+        lock.setStaleLockTime(15000); //in 15 seconds it will unlock automatically if you forget
         if(lock.tryLock())
         {
-            qInfo() << "Reading from file...";
-            if(!file.open(QIODevice::ReadOnly)) //another important mode is QIODevice::Append
+            qInfo() << "Writing to file...";
+            if(!file.open(QIODevice::WriteOnly)) //another important mode is QIODevice::Append
             {
                 qInfo() << "Error: " << file.errorString();
                 return;
             }
-            ReadLines(file);
+            Write(file, "Hello Locked World!");
             //lock.unlock();
         } else
         {
