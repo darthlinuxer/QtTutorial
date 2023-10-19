@@ -21,6 +21,7 @@ add_executable(5_Framework
   qlogexample.h
   Logger.h
   qprocessexample.h
+  qsysinfoexample.h
 )
 target_link_libraries(5_Framework Qt${QT_VERSION_MAJOR}::Core)
 

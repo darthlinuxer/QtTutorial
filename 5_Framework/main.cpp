@@ -5,6 +5,7 @@
 #include "qdatastreamexample.h"
 #include "qlogexample.h"
 #include "Logger.h"
+#include "qsysinfoexample.h";
 
 int main(int argc, char *argv[])
 {
@@ -33,11 +34,14 @@ int main(int argc, char *argv[])
     QLogExample logExample;
     logExample.RunExample();
 
+    //Creating your own Logger class and using it
     Logger::Attach();
     qInfo() << "Hello , I am being logged!";
     Logger::Detach();
 
-
+    qInfo() << "================ QSysInfo ============================";
+    QSysInfoExample sysinfoexample;
+    sysinfoexample.RunExample();
 
     return a.exec();
 }

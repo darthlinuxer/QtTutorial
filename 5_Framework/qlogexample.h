@@ -58,7 +58,7 @@ public:
         qDebug() << "This is a Debug message";
         qWarning() << "This is a Warning message";
         qCritical() << "This is a Critical message";
-        qFatal() << "This is a Fatal message";
+        //qFatal() << "This is a Fatal message";
 
         qInstallMessageHandler(nullptr);
     }
