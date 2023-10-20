@@ -7,6 +7,7 @@ class QSysInfoExample
 {
 public:
     void RunExample(){
+        qInfo() << "================ QSysInfo ============================";
         QSysInfo sys;
         qInfo() << "System info:";
         qInfo() << "Boot id: " << sys.bootUniqueId();
