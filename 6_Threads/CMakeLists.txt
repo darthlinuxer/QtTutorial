@@ -19,6 +19,7 @@ add_executable(6_Threads
   counter.h
   producer.h
   consumer.h
+  TestSlot.h
 
 )
 target_link_libraries(6_Threads Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Concurrent)
