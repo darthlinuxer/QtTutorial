@@ -17,7 +17,7 @@ public:
 
 public slots:
     void Finished(){
-        qInfo() << "Slot Finished called...";
+        qInfo() << "Slot Finished from Example 10 called...";
     }
 };
 

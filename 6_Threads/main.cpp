@@ -41,6 +41,15 @@ void PrintName(std::string name, int max)
     for(int i=0; i<max; i++) qInfo()<< "Hello " << name << ":" << i << " -> from thread " << QThread::currentThread();
 }
 
+void dostuff(int value)
+{
+    for (int i = 0;i < 5; i++)
+    {
+        QThread::currentThread()->msleep(100);
+        qInfo() << "Thread: " << value << " = " << i;
+    }
+}
+
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
@@ -182,7 +191,7 @@ int main(int argc, char *argv[])
     //Will run each value on different threads in a ThreadPool, return a value and will not block execution of main thread
     QFuture<int> future4 = QtConcurrent::mapped(values, &DoMap);
     qInfo() << "Back to main Thread...";
-    qInfo() << future4.results();
+    qInfo() << future4.results(); //blocks the main thread
 
     qInfo() << "\n\n============= Example 9: Working with QtConcurrency in multiple threads not returning a value =============";
     values.clear();
@@ -191,7 +200,7 @@ int main(int argc, char *argv[])
     //Will run each value on different threads in a ThreadPool, does not block main thread, values are returned by ref
     QFuture<void> future5 = QtConcurrent::map(values, &DoMapVoid);
     qInfo() << "Back to main Thread...";
-    future5.waitForFinished();
+    future5.waitForFinished(); //blocks the main thread
     qInfo() << values;
 
     qInfo() << "\n\n============= Example 10: Working with QFutureWatcher connecting signals and slots =============";
@@ -201,15 +210,43 @@ int main(int argc, char *argv[])
 
     QFutureWatcher<void> watcher;
     TestSlot test;
-    QObject::connect(&watcher, &QFutureWatcher<void>::finished, &test, &TestSlot::Finished, Qt::QueuedConnection);
+    QObject::connect(&watcher, &QFutureWatcher<void>::finished, &test, &TestSlot::Finished, Qt::DirectConnection);
 
     qInfo() << "Starting...";
     QFuture<void> voidMap = QtConcurrent::map(values, &DoMapVoid);
     watcher.setFuture(voidMap);
     qInfo() << "Back on Main Thread...";
     watcher.waitForFinished(); //blocking execution
+
     qInfo() << "Done";
     qInfo() << mappedList;
+    qInfo() << watcher.isFinished();
+
+    qInfo() << "\n\n============= Example 11: Working with Iterators =============";
+    values.clear();
+    for(int i=0; i<3; i++) values << i;
+    QFuture<int> future6 = QtConcurrent::mapped(values, &DoMap);
+
+    //iterating each value using QFutureIterator
+    QFutureIterator<int> iter(future6);
+    while(iter.hasNext()) qInfo() << "QFutureIterator style: " << iter.next();
+
+    //iterating each value in normal C++ Style
+    for(int i =0; i< future6.results().length(); i++) qInfo() << "index style: " << future6.resultAt(i);
+
+   //Iteration Qt style
+    foreach(int i, future6.results()) qInfo() << "Qt style: " << i;
+
+    qInfo() << "\n\n============= Example 12: Running multiple QFutures =============";
+    QFutureSynchronizer<void> sync;
+    for(int i = 0; i < 2; i++)
+    {
+        QFuture<void> f = QtConcurrent::run(&dostuff,i);
+        sync.addFuture(f);
+    }
+
+    //sync.waitForFinished();
+    //waitForFinished called in the QFutureSynchronizer deconstructor
 
     return a.exec();
 }
